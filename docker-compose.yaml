@@ -19,5 +19,32 @@ services:
       timeout: 3s
       retries: 10
 
+  run_migrations:
+    build: .
+    env_file: .env
+    environment:
+      POSTGRES_HOST: db
+    depends_on:
+      db:
+        condition: service_healthy
+    command: python manage.py migrate
+
+  api:
+    build: .
+    env_file: .env
+    environment:
+      POSTGRES_HOST: db
+      DEBUG: false
+    depends_on:
+      db:
+        condition: service_healthy
+      run_migrations:
+        condition: service_completed_successfully
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./core:/opt/app/core/
+      - ./todolist:/opt/app/todolist
+
 volumes:
     pg_data:
