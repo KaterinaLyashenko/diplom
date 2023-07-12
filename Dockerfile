@@ -1,15 +1,13 @@
-FROM python:3.11.4-slim
+FROM python:3.10-slim
 
-ENV POETRY_VERSION=1.5.1
+WORKDIR /app
 
-RUN pip install "poetry==$POETRY_VERSION"
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONNUNBUFFERED=1
 
-WORKDIR /opt/app
+COPY requirements.txt .
 
-COPY pyproject.toml poetry.lock ./
-
-RUN poetry config virtualenvs.create false \
-    && poetry install --no-root
+RUN pip install -r requirements.txt
 
 COPY . .
 
