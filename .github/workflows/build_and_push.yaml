@@ -22,3 +22,22 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USER }}/diploma:latest
+
+  deploy:
+    needs: build
+    uns-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Copy in server
+        user: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          source: "deploy/*"
+          target: "todolist_15"
+          strip_components: 1
+
+
+
