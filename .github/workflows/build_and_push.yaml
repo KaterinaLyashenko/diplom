@@ -3,7 +3,7 @@ name: ci
 on: [push]
 
 jobs:
-  """build:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -21,10 +21,10 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USER }}/diploma:latest"""
+          tags: ${{ secrets.DOCKERHUB_USER }}/diploma:latest
 
   deploy:
-    #needs: build
+    needs: build
     uns-on: ubuntu-latest
     steps:
       - name: Checkout
