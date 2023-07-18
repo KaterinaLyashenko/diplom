@@ -1,6 +1,6 @@
 name: ci
 
-on: push
+on: [push]
 
 jobs:
   build:
@@ -21,4 +21,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USER }}/diplom:latest
+          tags: ${{ secrets.DOCKERHUB_USER }}/diploma:latest
