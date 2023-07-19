@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+
+  front:
+    image: sermalenk/skypro-front:lesson-34
+    restart: on-failure
+    ports:
+      - "80:80"
+    depends_on:
+      api:
+        condition: service_started
+      collect_static:
+        condition:  service_completed_successfully
+
+  api:
+    image: ${DOCKER_USERNAME}/diploma:latest
+    environment:
+      SECRET_KEY: ${SECRET_KEY}
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      collect_static:
+        condition: service_completed_successfully
+
+  migrations:
+    image: ${DOCKER_USERNAME}/diploma:latest
+    environment:
+      SECRET_KEY: ${SECRET_KEY}
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: python manage.py migrate
+
+  postgres:
+    image: postgres:14.8
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    healthcheck:
+      test:  pg_isready -U ${DB_USER} -d ${DB_NAME}
+      interval:  5s
+      timeout:  3s
+      retries:  10
+    restart:  always
+    volumes:
+      -  postgres_data:/var/lib/postgresql/data
+
+
