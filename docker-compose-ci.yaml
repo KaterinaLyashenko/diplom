@@ -10,8 +10,6 @@ services:
     depends_on:
       api:
         condition: service_started
-      collect_static:
-        condition:  service_completed_successfully
 
   api:
     image: ${DOCKER_USERNAME}/diploma:latest
@@ -25,8 +23,6 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-      collect_static:
-        condition: service_completed_successfully
 
   migrations:
     image: ${DOCKER_USERNAME}/diploma:latest
