@@ -37,7 +37,7 @@ jobs:
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
         run: |
           mkdir deploy
-          envsubst < docker-compose.yaml > docker-compose.yaml
+          envsubst < docker-compose.yaml > deploy/docker-compose.yaml
       - name: Copy in server
         uses: appleboy/scp-action@master
         with:
