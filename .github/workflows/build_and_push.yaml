@@ -45,7 +45,7 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           password: ${{ secrets.SSH_PASSWORD }}
           source: "deploy/*"
-          target: "todolist_15"
+          target: "todolist"
           strip_components: 1
       - name: Deploy app
         uses: appleboy/ssh-action@master
